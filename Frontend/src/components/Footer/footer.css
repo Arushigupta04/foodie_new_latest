@@ -1,0 +1,135 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    background-color: #1c1c1c;
+    color: #ffffff;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.footer1 {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer1-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.footer-list {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 20px;
+}
+
+.footer-list h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #f39c12;
+}
+
+.footer-list p a {
+    color: #bdc3c7;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.footer-list p a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.social-media {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
+}
+
+.icon-img:hover {
+    transform: scale(1.1);
+}
+
+.newsletter-form,
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.newsletter-form input{
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    height:50px;
+    width:100px;
+    font-size: 10px;
+    width: 100%;
+    resize: vertical;
+}
+.feedback-form textarea {
+    padding: 7px;
+    border: none;
+    border-radius: 4px;
+    height:100px;
+    width:50px;
+    font-size: 10px;
+    width: 100%;
+    resize: vertical;
+}
+
+.newsletter-form button,
+.feedback-form button {
+    padding: 10px;
+    border: none;
+    background-color: #f39c12;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.newsletter-form button:hover,
+.feedback-form button:hover {
+    background-color: #e67e22;
+}
+
+.footer2 {
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #2c2c2c;
+    margin-top: 20px;
+}
+
+#copyright-txt {
+    font-size: 14px;
+    color: #bdc3c7;
+}
+
+/* Media Queries */
+@media screen and (max-width: 800px) {
+    .footer1-grid {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .footer-list {
+        min-width: 100%;
+    }
+
+    .social-media {
+        justify-content: center;
+    }
+}
