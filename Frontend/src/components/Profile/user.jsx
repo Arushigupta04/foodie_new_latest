@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import './style.css';
 import { useCookies } from 'react-cookie';
 import { CartContext } from '../Cart/CartContext';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const serverURL = "http://localhost:5000";
@@ -20,6 +20,11 @@ function UserProfile() {
   const [updatedUserInfo, setUpdatedUserInfo] = useState({
     _id: '',
     fullName: '',
+    email: '',
+    mobile: '',
+  });
+
+  const [errors, setErrors] = useState({
     email: '',
     mobile: '',
   });
@@ -45,7 +50,9 @@ function UserProfile() {
 
       if (response.ok) {
         const userData = await response.json();
-        const sortedOrders = userData.RecentOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const sortedOrders = userData.RecentOrders.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
         setUser({ ...userData, RecentOrders: sortedOrders });
         setUpdatedUserInfo({
           _id: userData._id,
@@ -69,77 +76,16 @@ function UserProfile() {
     setEditMode(true);
   };
 
-  const handleSave = async () => {
-    try {
-      const token = cookies.token;
-      if (!token) {
-        console.error('Token not found in cookies');
-        return;
-      }
-  
-      const response = await fetch(`${serverURL}/api/user/update`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedUserInfo),
-      });
-  
-      if (response.ok) {
-        const updatedUserData = await response.json();
-        if (updatedUserData && updatedUserData.user) {
-          toast.success('User information updated successfully', { toastId: 'update-success' });
-          setEditMode(false);
-          setUser(updatedUserData.user);
-          fetchUserData();
-          // Preserve the RecentOrders in the updated user data
-        
-        } else {
-          console.error('Failed to get updated user data');
-        }
-      } else {
-        console.error('Failed to update user information');
-      }
-    } catch (error) {
-      console.error('Error updating user information:', error);
-    }
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email) ? '' : 'Invalid email format';
   };
-  
 
-  const handleDeleteAccount = () => {
-    toast.info('Are you sure you want to delete your account? This action cannot be undone.', {
-      autoClose: false,
-      closeButton: true,
-      onClose: async () => {
-        try {
-          const token = cookies.token;
-          if (!token) {
-            console.error('Token not found in cookies');
-            return;
-          }
-
-          const response = await fetch(`${serverURL}/api/user/delete`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (response.ok) {
-            removeCookie('token');
-            removeCookie('cartItems', { path: '/' });
-            clearCart();
-            window.location.href = '/sign-up';
-          } else {
-            console.error('Failed to delete user account');
-          }
-        } catch (error) {
-          console.error('Error deleting user account:', error);
-        }
-      }
-    });
+  const validateMobile = (mobile) => {
+    const mobileRegex = /^[6-9]\d{9}$/;
+    return mobileRegex.test(mobile)
+      ? ''
+      : 'Invalid mobile number (must start with 6-9 and have 10 digits)';
   };
 
   const handleInputChange = (e) => {
@@ -148,6 +94,77 @@ function UserProfile() {
       ...updatedUserInfo,
       [name]: value,
     });
+
+    if (name === 'email') {
+      setErrors({ ...errors, email: validateEmail(value) });
+    } else if (name === 'mobile') {
+      setErrors({ ...errors, mobile: validateMobile(value) });
+    }
+  };
+
+  const handleSave = async () => {
+    if (errors.email || errors.mobile) {
+      return;
+    }
+
+    try {
+      const token = cookies.token;
+      if (!token) {
+        console.error('Token not found in cookies');
+        return;
+      }
+
+      const response = await fetch(`${serverURL}/api/user/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedUserInfo),
+      });
+
+      if (response.ok) {
+        setEditMode(false);
+        fetchUserData();
+        window.location.reload();
+      } else {
+        console.error('Failed to update user information');
+      }
+    } catch (error) {
+      console.error('Error updating user information:', error);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      const token = cookies.token;
+      if (!token) {
+        console.error('Token not found in cookies');
+        return;
+      }
+
+      const response = await fetch(`${serverURL}/api/user/delete`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        removeCookie('token');
+        removeCookie('cartItems', { path: '/' });
+        clearCart();
+        toast.success('Account deleted successfully!');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      } else {
+        console.error('Failed to delete user account');
+      }
+    } catch (error) {
+      console.error('Error deleting user account:', error);
+    }
   };
 
   if (!cookies.token) {
@@ -161,7 +178,6 @@ function UserProfile() {
 
   return (
     <div className="card user-card-full col-xl-8" style={{ margin: '40px auto' }}>
-
       <div className="row m-l-0 m-r-0">
         <div className="col-sm-4 bg-c-lite-green user-profile">
           <div className="card-block text-center text-white">
@@ -191,6 +207,7 @@ function UserProfile() {
                   value={updatedUserInfo.email}
                   onChange={handleInputChange}
                 />
+                {errors.email && <p className="text-white">{errors.email}</p>}
                 <input
                   type="text"
                   className="form-control mt-3"
@@ -199,6 +216,7 @@ function UserProfile() {
                   value={updatedUserInfo.mobile}
                   onChange={handleInputChange}
                 />
+                {errors.mobile && <p className="text-white">{errors.mobile}</p>}
               </div>
             ) : (
               <div>
@@ -207,7 +225,11 @@ function UserProfile() {
                 <p>{user.mobile}</p>
               </div>
             )}
-            <button className="btn btn-light mt-3" onClick={editMode ? handleSave : handleEdit}>
+            <button
+              className="btn btn-light mt-3"
+              onClick={editMode ? handleSave : handleEdit}
+              disabled={editMode && (errors.email || errors.mobile)}
+            >
               {editMode ? 'Save' : 'Edit'}
             </button>
           </div>
@@ -215,16 +237,6 @@ function UserProfile() {
         <div className="col-sm-8">
           <div className="card-block">
             <h6 className="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
-            <div className="row">
-              <div className="col-sm-6">
-                <p className="m-b-10 f-w-600">Email</p>
-                <h6 className="text-muted f-w-400">{user.email}</h6>
-              </div>
-              <div className="col-sm-6">
-                <p className="m-b-10 f-w-600">Mobile</p>
-                <h6 className="text-muted f-w-400">{user.mobile}</h6>
-              </div>
-            </div>
             <button type="button" className="btn btn-danger mt-5" onClick={handleDeleteAccount}>
               Delete Account
             </button>
@@ -235,11 +247,11 @@ function UserProfile() {
               user.RecentOrders.map((order, index) => (
                 <div className="card mb-3" key={index}>
                   <div className="row no-gutters">
-                    <div className="col-md-4" style={{ alignSelf: "center" }}>
+                    <div className="col-md-4" style={{ alignSelf: 'center' }}>
                       {order.image ? (
                         <img src={order.image} className="card-img" alt="Product" />
                       ) : (
-                        <p>No Imge Available</p>
+                        <p>No Image Available</p>
                       )}
                     </div>
                     <div className="col-md-8">
@@ -250,16 +262,8 @@ function UserProfile() {
                           <p>&nbsp;&nbsp;₹{order.price}</p>
                         </div>
                         <div className="text-container">
-                          <h6>Address:</h6>
-                          <p>&nbsp;&nbsp;{order.address}</p>
-                        </div>
-                        <div className="text-container">
                           <h6>Ordered At:</h6>
                           <p>&nbsp;&nbsp;{order.createdAt}</p>
-                        </div>
-                        <div className="text-container">
-                          <h6>Status:</h6>
-                          <p>&nbsp;&nbsp;{order.status}</p>
                         </div>
                       </div>
                     </div>

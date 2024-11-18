@@ -63,6 +63,8 @@ import AdminDashboard from './components/Admin/AdminPage';
 import AboutUs from "./components/About-Us/aboutpage";
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import Toast styles
+import AllCategories from './components/Items/AllCategories.jsx';
+import AllCategories1 from './components/Items/AllCategories1.jsx';
 
 function App() {
   
@@ -80,6 +82,8 @@ function App() {
             <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/admin" element={<><AdminDashboard /><Footer /></>} />
             <Route path="/admin/add-items" element={<><AddItem /><Footer /></>} />
+            <Route path="/admin/categories" element={<><AllCategories /><Footer /></>} />
+            <Route path="/admin/categories1" element={<><AllCategories1 /><Footer /></>} />
             <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>

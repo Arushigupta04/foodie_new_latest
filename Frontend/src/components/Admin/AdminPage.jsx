@@ -323,6 +323,16 @@ function AdminDashboard() {
     Add New Items
   </a>
 </div>
+                <div className="text-center mt-2"> {/* Reduced top margin from mt-4 to mt-2 */}
+  <a href="http://localhost:3000/admin/categories" className="btn btn-secondary" style={{ fontSize: '18px', padding: '12px 24px' }}>
+    All Categories info
+  </a>
+</div>
+                <div className="text-center mt-2"> {/* Reduced top margin from mt-4 to mt-2 */}
+  <a href="http://localhost:3000/admin/categories1" className="btn btn-primary" style={{ fontSize: '18px', padding: '12px 24px' }}>
+    All tems info
+  </a>
+</div>
 
 
               </div>

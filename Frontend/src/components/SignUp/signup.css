@@ -142,3 +142,8 @@
   outline: none;
   border-color: #f4992a;
 }
+.error-text {
+  color: red;
+  font-size: 0.875rem; /* Optional for smaller error text */
+  margin-top: 4px; /* Adds a little spacing between input and error text */
+}

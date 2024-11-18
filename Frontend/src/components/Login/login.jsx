@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './login.css';
 import SignInImage from "../../assets/log.jpg";
 import { useCookies } from 'react-cookie';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// const serverURL = "http://192.168.54.63:5000"
-const serverURL = "http://localhost:5000"
+const serverURL = "http://localhost:5000";
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
   const [cookies, setCookie] = useCookies(['token']);
 
   const handleSubmit = async (e) => {
@@ -34,13 +32,21 @@ const Login = () => {
         toast.success('Login successful! Redirecting...');
         setTimeout(() => window.location.href = '/menu', 2000);
       } else {
-        toast.error(data.error || 'Something went wrong');
+        setError(data.error || 'Something went wrong');
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error('An error occurred, please try again later');
+      setError('An error occurred, please try again later.');
     }
   };
+
+  // Automatically clear error after 3 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 3000);
+      return () => clearTimeout(timer); // Clear timeout on component unmount
+    }
+  }, [error]);
 
   return (
     <>
@@ -80,6 +86,7 @@ const Login = () => {
                 <div className="form-group form-button">
                   <input type="submit" name="signin" id="signin" className="form-submit" value="Log in" />
                 </div>
+                {error && <p className="error-text">{error}</p>}
               </form>
             </div>
           </div>

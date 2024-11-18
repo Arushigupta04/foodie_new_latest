@@ -148,11 +148,11 @@ router.post("/user/add-order", async (req, res) => {
     await user.save();
 
     // Send confirmation email
-    const subject = 'Order Confirmation';
-    const text = `Hi ${user.fullName},\n\nYour order has been placed successfully. Your order details are as follows:\n\nName: ${name}\nPrice: ₹${price}\nDelivery Address: ${delivery_address}\nQuantity: ${quantity}\nPayment Method: ${payment_method}\n\nThank you for shopping with us!`;
-    const html = `<p>Hi ${user.fullName},</p><p>Your order has been placed successfully. Your order details are as follows:</p><ul><li>Name: ${name}</li><li>Price: ₹${price}</li><li>Delivery Address: ${delivery_address}</li><li>Quantity: ${quantity}</li><li>Payment Method: ${payment_method}</li></ul><p>Thank you for shopping with us!</p>`;
+    // const subject = 'Order Confirmation';
+    // const text = `Hi ${user.fullName},\n\nYour order has been placed successfully. Your order details are as follows:\n\nName: ${name}\nPrice: ₹${price}\nDelivery Address: ${delivery_address}\nQuantity: ${quantity}\nPayment Method: ${payment_method}\n\nThank you for shopping with us!`;
+    // const html = `<p>Hi ${user.fullName},</p><p>Your order has been placed successfully. Your order details are as follows:</p><ul><li>Name: ${name}</li><li>Price: ₹${price}</li><li>Delivery Address: ${delivery_address}</li><li>Quantity: ${quantity}</li><li>Payment Method: ${payment_method}</li></ul><p>Thank you for shopping with us!</p>`;
 
-    await sendEmail(email, subject, text, html);
+    // await sendEmail(email, subject, text, html);
 
     return res.status(201).json({ message: "Order added successfully", order });
   } catch (err) {

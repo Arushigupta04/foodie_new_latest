@@ -8,6 +8,7 @@ const HOST = "192.168.54.63";
 const { ConnectMongoDB } = require("./connection");
 const { CheckforAuthCookie } = require("./middlewares/auth");
 const router = require("./routes/user");
+const paymentRoutes =require("./routes/paymentRoutes")
 const itemRouter = require("./routes/items");
 // const MapRouter = require("./routes/map");
 
@@ -28,6 +29,7 @@ app.use(cors());
 // app.use("/api/geocode/",MapRouter)
 app.use("/api/add-new/",itemRouter)
 app.use("/api", router);
+app.use("/api/v1/pay",paymentRoutes)
 app.get("/test",(req,res)=>{
   return res.send("testing");
 })
