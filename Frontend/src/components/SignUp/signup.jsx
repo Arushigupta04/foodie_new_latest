@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
-import './signup.css';
-import SignUpImage from '../../assets/register.jpg';
+import "./signup.css";
+import SignUpImage from "../../assets/register.jpg";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,7 +25,7 @@ const SignUp = () => {
     if (password.length < 6) return "Weak";
     if (/^(?=.*[A-Za-z])(?=.*\d).{6,}$/.test(password)) {
       if (/^(?=.*[A-Za-z]{4,})(?=.*\d{2,}).{6,}$/.test(password)) {
-        if (/^(?=.*[A-Za-z]{4,})(?=.*\d{2,})(?=.*[!@#$%^&*]).{6,}$/.test(password)) {
+        if (/^(?=.*[A-Za-z]{4,})(?=.*\d{2,})(?=.*[!@#$%^&]).{6,}$/.test(password)) {
           return "Very Strong";
         }
         return "Strong";
@@ -55,7 +56,7 @@ const SignUp = () => {
     if (Object.keys(errors).length > 0) return;
 
     try {
-      const response = await fetch(`${serverURL}/api/signup`, { // Fixed syntax
+      const response = await fetch(`${serverURL}/api/signup`, { // Fixed template literal here
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullName, email, password, mobile, role }),

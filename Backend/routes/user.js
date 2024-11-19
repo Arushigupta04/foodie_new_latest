@@ -7,19 +7,15 @@ const { validateToken } = require("../services/auth");
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-
 const transporter = nodemailer.createTransport({
- host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
-
-
-
 
 const sendEmail = async (to, subject, text, html) => {
   try {
@@ -36,7 +32,6 @@ const sendEmail = async (to, subject, text, html) => {
     throw new Error('Email sending failed');
   }
 };
-
 
 router.use(CheckforAuthCookie("token"));
 
@@ -57,9 +52,10 @@ router.post("/signin", async (req, res) => {
   }
 });
 
- router.post("/signup", async (req, res) => {
+// Sign up route
+router.post("/signup", async (req, res) => {
   console.log("SignUp Request Received");
-  const { fullName, email, password, mobile,role } = req.body;
+  const { fullName, email, password, mobile, role } = req.body;
   try {
     const newUser = await USER.create({
       fullName,
@@ -67,7 +63,6 @@ router.post("/signin", async (req, res) => {
       password,
       mobile,
       role
-
     });
 
     const subject = 'Welcome to Our Service!';
@@ -86,12 +81,13 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-
+// Sign out route
 router.get("/signout", (req, res) => {
   console.log("SignOut Request Received");
   res.clearCookie("token").redirect("/");
 });
 
+// Delete user route
 router.post("/user/delete", async (req, res) => {
   console.log("Delete User Request Received");
   const authHeader = req.headers['authorization'];
@@ -114,6 +110,7 @@ router.post("/user/delete", async (req, res) => {
   }
 });
 
+// Add order route
 router.post("/user/add-order", async (req, res) => {
   console.log("Add Order Request Received");
 
@@ -148,11 +145,11 @@ router.post("/user/add-order", async (req, res) => {
     await user.save();
 
     // Send confirmation email
-    // const subject = 'Order Confirmation';
-    // const text = `Hi ${user.fullName},\n\nYour order has been placed successfully. Your order details are as follows:\n\nName: ${name}\nPrice: ₹${price}\nDelivery Address: ${delivery_address}\nQuantity: ${quantity}\nPayment Method: ${payment_method}\n\nThank you for shopping with us!`;
-    // const html = `<p>Hi ${user.fullName},</p><p>Your order has been placed successfully. Your order details are as follows:</p><ul><li>Name: ${name}</li><li>Price: ₹${price}</li><li>Delivery Address: ${delivery_address}</li><li>Quantity: ${quantity}</li><li>Payment Method: ${payment_method}</li></ul><p>Thank you for shopping with us!</p>`;
+    const subject = 'Order Confirmation';
+    const text = `Hi ${user.fullName},\n\nYour order has been placed successfully. Your order details are as follows:\n\nName: ${name}\nPrice: ₹${price}\nDelivery Address: ${delivery_address}\nQuantity: ${quantity}\nPayment Method: ${payment_method}\n\nThank you for shopping with us!`;
+    const html = `<p>Hi ${user.fullName},</p><p>Your order has been placed successfully. Your order details are as follows:</p><ul><li>Name: ${name}</li><li>Price: ₹${price}</li><li>Delivery Address: ${delivery_address}</li><li>Quantity: ${quantity}</li><li>Payment Method: ${payment_method}</li></ul><p>Thank you for shopping with us!</p>`;
 
-    // await sendEmail(email, subject, text, html);
+    await sendEmail(email, subject, text, html);
 
     return res.status(201).json({ message: "Order added successfully", order });
   } catch (err) {
@@ -161,7 +158,7 @@ router.post("/user/add-order", async (req, res) => {
   }
 });
 
-
+// Update user route
 router.post('/user/update', async (req, res) => {
   console.log("User Update Req Received");
   try {
@@ -188,6 +185,7 @@ router.post('/user/update', async (req, res) => {
   }
 });
 
+// Get user route
 router.get("/user", async (req, res) => {
   console.log("Get User Request Received");
   const authHeader = req.headers['authorization'];
@@ -215,6 +213,7 @@ router.get("/user", async (req, res) => {
   }
 });
 
+// Get all users route
 router.get("/users", async (req, res) => {
   console.log("Get All Users Request Received");
 
@@ -231,6 +230,32 @@ router.get("/users", async (req, res) => {
   }
 });
 
+// Delete user by email route
+router.delete("/user", async (req, res) => {
+  console.log("Delete User Request Received");
+
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    // Find and delete the user by email
+    const deletedUser = await USER.findOneAndDelete({ email });
+
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ message: "User deleted successfully", user: deletedUser });
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Get all orders route
 router.get("/orders", async (req, res) => {
   console.log("Get All Orders Request Received");
 

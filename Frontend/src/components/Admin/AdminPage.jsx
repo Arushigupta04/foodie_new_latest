@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, BarElement, LineElement, PointElement } from 'chart.js';
+import {toast} from "react-toastify"
 
 // Register chart components
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, BarElement, LineElement, PointElement);
@@ -52,7 +53,33 @@ function AdminDashboard() {
     fetchUsers();
     fetchOrders();
   }, []);
+  const handleDelete = async (email) => {
+    if (window.confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/user`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
 
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.success(data.message || "User deleted successfully");
+          // Refetch the user list after deletion
+          // fetchUsers();
+          // fetchUsers();
+        } else {
+          toast.error(data.error || "Failed to delete user");
+        }
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        toast.error("An error occurred while deleting the user");
+      }
+    }
+  };
   const totalEarnings = orders.reduce((total, order) => {
     return total + (parseFloat(order.price) * parseInt(order.quantity));
   }, 0);
@@ -294,12 +321,13 @@ function AdminDashboard() {
                         </div>
                         <div className="card-body">
                           <div className="table-responsive">
-                            <table className="table table-bordered" width="100%" cellSpacing="0">
+                            <table className="table table-bordered border-gray-400" width="100%" cellSpacing="0">
                               <thead>
                                 <tr>
                                   <th>Full Name</th>
                                   <th>Email</th>
                                   <th>Role</th>
+                                  <button>Delete</button>
                                 </tr>
                               </thead>
                               <tbody>
@@ -308,6 +336,7 @@ function AdminDashboard() {
                                     <td>{user.fullName}</td> {/* Ensure backend sends fullName */}
                                     <td>{user.email}</td>
                                     <td>{user.role}</td>
+                                    <button onClick={() => handleDelete(user.email)}>Delete</button>
                                   </tr>
                                 ))}
                               </tbody>
@@ -344,4 +373,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminDashboard;

@@ -10,7 +10,7 @@
     margin-bottom: 30px;
 }
 
-.left-body {
+/* .left-body {
     display: flex;
     position: sticky;
     top: 110px;
@@ -19,8 +19,17 @@
     flex-direction: column;
     width: 350px;
     border-right: 1px solid grey;
+} */
+.left-body {
+    display: flex;
+    position: sticky;
+    top: 110px;
+    height: fit-content;
+    overflow-y: hidden;
+    flex-direction: column;
+    width: 350px;
+    border-right: 1px solid grey;
 }
-
 .item-categories {
     display: flex;
     justify-content: space-between;
