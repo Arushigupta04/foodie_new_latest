@@ -60,49 +60,77 @@
 }
 
 .newsletter-form,
-.feedback-form {
+.feedback-form,
+.review-form {
     display: flex;
     flex-direction: column;
     gap: 8px;
     font-size: 13px;
 }
 
-.newsletter-form input{
+.newsletter-form input,
+.feedback-form textarea,
+.review-form textarea {
     padding: 8px;
     border: none;
     border-radius: 4px;
-    height:50px;
-    width:100px;
-    font-size: 10px;
-    width: 100%;
-    resize: vertical;
-}
-.feedback-form textarea {
-    padding: 7px;
-    border: none;
-    border-radius: 4px;
-    height:100px;
-    width:50px;
-    font-size: 10px;
+    font-size: 14px;
     width: 100%;
     resize: vertical;
 }
 
+.newsletter-form input {
+    height: 50px;
+}
+
+.feedback-form textarea,
+.review-form textarea {
+    height: 100px;
+}
+
 .newsletter-form button,
-.feedback-form button {
+.feedback-form button,
+.review-form button {
     padding: 10px;
     border: none;
     background-color: #f39c12;
     color: white;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
 }
 
 .newsletter-form button:hover,
-.feedback-form button:hover {
+.feedback-form button:hover,
+.review-form button:hover {
     background-color: #e67e22;
+}
+
+.rating {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.rating .star {
+    font-size: 24px;
+    cursor: pointer;
+    color: lightgray;
+    transition: color 0.2s ease;
+}
+
+.rating .star.filled,
+.rating .star:hover {
+    color: gold;
+}
+
+.thank-you-message {
+    margin-top: 10px;
+    color: #f1c40f;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .footer2 {
@@ -131,6 +159,21 @@
     }
 
     .social-media {
-        justify-content: center;
-    }
+        justify-content:center;
 }
+}
+.review-form input {
+    height: 60px; /* Increased height */
+    width: 100%; /* Reduced width */
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-form input:focus {
+    box-shadow: 0 0 8px rgba(243, 156, 18, 0.5); /* Subtle glow effect on focus */
+  }
+  
