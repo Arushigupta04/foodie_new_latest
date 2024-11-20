@@ -153,3 +153,20 @@ body {
       font-size: 24px; /* Smaller heading size */
     }
   }
+  .error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 30px;
+    margin-bottom: 5px;
+  }
+  .form-group {
+    margin-bottom: 20px; /* Add some space below the form group */
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 45px; /* Ensure it's placed slightly below the input */
+    display: block;  /* Make sure it's displayed as a block element, taking full width */
+  }
+  

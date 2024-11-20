@@ -8,9 +8,26 @@ const AddItemForm = ({ categories, onAddItem }) => {
   const [offer, setOffer] = useState('');
   const [image, setImage] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [error, setError] = useState('');
+
+  const handlePriceChange = (e) => {
+    const value = e.target.value;
+    // Allow only numeric input
+    if (value === '' || /^[0-9]*$/.test(value)) {
+      setPrice(value);
+      setError(''); // Clear error if valid
+    } else {
+      setError('Price must be a numeric value.');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (error) {
+      alert('Please fix the errors before submitting.');
+      return;
+    }
+
     const newItem = {
       item_title: title,
       item_type: type,
@@ -18,6 +35,7 @@ const AddItemForm = ({ categories, onAddItem }) => {
       item_offer: offer,
       item_src: image,
     };
+
     if (selectedCategory) {
       onAddItem(selectedCategory, newItem);
       setTitle('');
@@ -62,10 +80,11 @@ const AddItemForm = ({ categories, onAddItem }) => {
           type="text"
           id="price"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={handlePriceChange}
           required
           className="form-input"
         />
+        {error && <p className="error-message">{error}</p>}
       </div>
       <div className="form-group">
         <label htmlFor="offer" className="form-label">Offer:</label>
