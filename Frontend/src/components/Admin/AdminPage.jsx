@@ -314,38 +314,111 @@ function AdminDashboard() {
 
                   {/* Users Overview */}
                   <div className="row" style={{ justifyContent: "center" }}>
-                    <div className="col-xl-12 mb-4">
-                      <div className="card shadow h-100 py-2">
-                        <div className="card-header py-3">
-                          <h6 className="m-0 font-weight-bold text-primary">Users Overview</h6>
-                        </div>
-                        <div className="card-body">
-                          <div className="table-responsive">
-                            <table className="table table-bordered border-gray-400" width="100%" cellSpacing="0">
-                              <thead>
-                                <tr>
-                                  <th>Full Name</th>
-                                  <th>Email</th>
-                                  <th>Role</th>
-                                  <button>Delete</button>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {users.map(user => (
-                                  <tr key={user._id}>
-                                    <td>{user.fullName}</td> {/* Ensure backend sends fullName */}
-                                    <td>{user.email}</td>
-                                    <td>{user.role}</td>
-                                    <button onClick={() => handleDelete(user.email)}>Delete</button>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+  <div className="col-xl-10 col-lg-12 mb-4">
+    <div
+      className="card shadow h-100 py-2"
+      style={{ border: "1px solid gray" }}
+    >
+      <div className="card-header py-3">
+        <h6 className="m-0 font-weight-bold text-primary">Users Overview</h6>
+      </div>
+      <div className="card-body">
+        <div className="table-responsive">
+          <table
+            className="table table-bordered"
+            style={{ border: "1px solid gray", width: "100%" }}
+            cellSpacing="0"
+          >
+            <thead style={{ backgroundColor: "#f8f9fc", fontWeight: "bold" }}>
+              <tr>
+              <th
+  style={{
+    border: "1px solid gray",
+    backgroundColor: "#007bff", // Blue background
+    color: "white",            // White text
+    textAlign: "center",       // Center-align text
+    padding: "10px",           // Add some padding for spacing
+  }}
+>
+  Full Name
+</th>
+<th
+  style={{
+    border: "1px solid gray",
+    backgroundColor: "#007bff",
+    color: "white",
+    textAlign: "center",
+    padding: "10px",
+  }}
+>
+  Email
+</th>
+<th
+  style={{
+    border: "1px solid gray",
+    backgroundColor: "#007bff",
+    color: "white",
+    textAlign: "center",
+    padding: "10px",
+  }}
+>
+  Role
+</th>
+<th
+  style={{
+    border: "1px solid gray",
+    backgroundColor: "#007bff",
+    color: "white",
+    textAlign: "center",
+    padding: "10px",
+  }}
+>
+ Delete Use
+</th>
+
+              </tr>
+            </thead>
+            <tbody>
+  {users.map((user) => (
+    <tr key={user._id}>
+      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.fullName}</td>
+      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.email}</td>
+      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.role}</td>
+      <td style={{ border: "1px solid gray", padding: "10px", textAlign: "center" }}>
+        <button
+          onClick={() => handleDelete(user.email)}
+          style={{
+            border: "1px solid gray",
+            backgroundColor: "#007bff", // Same blue as header
+            color: "white",            // White text
+            padding: "5px 10px",       // Padding for spacing
+            borderRadius: "4px",       // Rounded corners for a polished look
+            cursor: "pointer",         // Pointer cursor for better UX
+            textAlign: "center",       // Center text within button
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = "red"; // Highlight in red on hover
+            e.target.style.color = "white";
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = "#007bff"; // Reset to blue
+            e.target.style.color = "white";
+          }}
+        >
+          Delete User
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
                 </div>
                 <div className="text-center mt-2"> {/* Reduced top margin from mt-4 to mt-2 */}
   <a href="http://localhost:3000/admin/add-items" className="btn btn-primary" style={{ fontSize: '18px', padding: '12px 24px' }}>
@@ -373,4 +446,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminDashboard; 
