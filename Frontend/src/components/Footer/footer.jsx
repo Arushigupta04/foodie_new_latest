@@ -1,23 +1,80 @@
-
 import React, { useState } from 'react';
 import './footer.css';
-import { Link } from 'react-router-dom'; // Import Link from React Router
 import instagramIcon from '../../assets/instagram.svg';
 import facebookIcon from '../../assets/facebook.svg';
-import twitterIcon from '../../assets/twitter.svg'; // Add Twitter icon import
+import twitterIcon from '../../assets/twitter.svg';
 
 function Footer() {
   const [email, setEmail] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const [reviewEmail, setReviewEmail] = useState(''); // State for email in review form
+  const [review, setReview] = useState('');
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [thankYouMessage, setThankYouMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
+  // Newsletter form submission
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
-    setEmail(''); // Reset email field after submission
+
+    // Basic validation
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setErrorMessage('Please enter a valid email address for the newsletter.');
+      return;
+    }
+
+    console.log(`Newsletter subscription: ${email}`);
+    setEmail('');
+    setErrorMessage('');
+    setThankYouMessage('Thanks for subscribing to our newsletter!');
+    setTimeout(() => setThankYouMessage(''), 3000);
   };
 
-  const handleFeedbackSubmit = (e) => {
+  // Review form submission
+  const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    setFeedback(''); // Reset feedback field after submission
+
+    if (!reviewEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(reviewEmail)) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+
+    if (rating === 0 || !review) {
+      setErrorMessage('Rating and review are required.');
+      return;
+    }
+
+    const reviewData = {
+      email: reviewEmail,
+      rating: rating,
+      reviewText: review,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/review/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setReviewEmail('');
+        setReview('');
+        setRating(0);
+        setThankYouMessage('Thanks for your feedback!');
+        setErrorMessage('');
+        setTimeout(() => setThankYouMessage(''), 3000);
+      } else {
+        setErrorMessage(result.message || 'Failed to submit review. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      setErrorMessage('There was an error submitting your review. Please try again.');
+    }
   };
 
   return (
@@ -31,7 +88,6 @@ function Footer() {
             <p><a href="http://localhost:3000/menu">Deals</a></p>
           </div>
 
-          
           <div className="footer-list">
             <h4>User Account</h4>
             <p><a href="http://localhost:3000/sign-up">Sign Up</a></p>
@@ -76,16 +132,42 @@ function Footer() {
           </div>
 
           <div className="footer-list">
-            <h4>Feedback</h4>
-            <form onSubmit={handleFeedbackSubmit} className="feedback-form">
+            <h4>Product Review</h4>
+            <form onSubmit={handleReviewSubmit} className="review-form">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={reviewEmail}
+                onChange={(e) => setReviewEmail(e.target.value)}
+                required
+              />
+              <div className="rating">
+                {[...Array(5)].map((_, index) => {
+                  const ratingValue = index + 1;
+                  return (
+                    <span
+                      key={ratingValue}
+                      className={`star ${ratingValue <= (hover || rating) ? 'filled' : ''}`}
+                      onClick={() => setRating(ratingValue)}
+                      onMouseEnter={() => setHover(ratingValue)}
+                      onMouseLeave={() => setHover(0)}
+                    >
+                      &#9733;
+                    </span>
+                  );
+                })}
+              </div>
               <textarea
-                placeholder="Your feedback"
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
+                placeholder="Share your thoughts about our products"
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
                 required
               />
               <button type="submit">Submit</button>
             </form>
+
+            {thankYouMessage && <p className="thank-you-message">{thankYouMessage}</p>}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
           </div>
         </div>
       </div>
