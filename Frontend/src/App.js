@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AllCategories from './components/Items/AllCategories.jsx';
 import AllCategories1 from './components/Items/AllCategories1.jsx';
 import { useCookies } from 'react-cookie';
+import Reviews from './components/Items/Reviews.jsx';
 
 function App() {
   const [cookies] = useCookies(['token']);
@@ -83,29 +84,59 @@ function App() {
         <div className="main-body">
           <NavBar />
           <Routes>
-            <Route path="/" element={<><Home /><Footer /></>} />
-            <Route path="/menu" element={<><MenuPage /><Footer /></>} />
-            <Route path="/sign-in" element={<Login />} />
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/cart" element={<ShoppingCart />} />
-            <Route path="/admin/add-items" element={<><AddItem /><Footer /></>} />
-            <Route path="/admin/categories" element={<><AllCategories /><Footer /></>} />
-            <Route path="/admin/categories1" element={<><AllCategories1 /><Footer /></>} />
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute>
-                  <><AdminDashboard /><Footer /></>
-                </ProtectedRoute>
-              } 
-            />
-            {/* <Route path="/admin/add-items" element={<ProtectedRoute><><AddItem /><Footer /></></ProtectedRoute>} />
-            <Route path="/admin/categories" element={<ProtectedRoute><><AllCategories /><Footer /></></ProtectedRoute>} />
-            <Route path="/admin/categories1" element={<ProtectedRoute><><AllCategories1 /><Footer /></></ProtectedRoute>} /> */}
-            <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
+  <Route path="/" element={<><Home /><Footer /></>} />
+  <Route path="/menu" element={<><MenuPage /><Footer /></>} />
+  <Route path="/sign-in" element={<Login />} />
+  <Route path="/sign-up" element={<SignUp />} />
+  <Route path="/profile" element={<UserProfile />} />
+  <Route path="/cart" element={<ShoppingCart />} />
+  <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
+
+  {/* Admin Protected Routes */}
+  <Route 
+    path="/admin" 
+    element={
+      <ProtectedRoute>
+        <><AdminDashboard /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/add-items" 
+    element={
+      <ProtectedRoute>
+        <><AddItem /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/categories" 
+    element={
+      <ProtectedRoute>
+        <><AllCategories /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/categories1" 
+    element={
+      <ProtectedRoute>
+        <><AllCategories1 /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/Review" 
+    element={
+      <ProtectedRoute>
+        <><Reviews/><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+
+  <Route path="*" element={<ErrorPage />} />
+</Routes>
+
           <ToastContainer />
         </div>
       </Router>

@@ -56,6 +56,7 @@ const ShoppingCart = () => {
         setOrderPlaced(true);
         clearCart();
       }, 1500);
+      console.log("wordkedddddddfddd")
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Failed to place order. Please try again later.');

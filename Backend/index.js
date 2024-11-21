@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
@@ -21,6 +22,7 @@ ConnectMongoDB("mongodb://127.0.0.1:27017/foodie")
   .catch((err) => console.log("Error Connecting MongoDB", err));
 
 // Middleware
+app.use('./assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(CheckforAuthCookie("token"));

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import './style1.css';
 
 const AddItemForm = ({ categories, onAddItem }) => {
@@ -12,10 +13,9 @@ const AddItemForm = ({ categories, onAddItem }) => {
 
   const handlePriceChange = (e) => {
     const value = e.target.value;
-    // Allow only numeric input
     if (value === '' || /^[0-9]*$/.test(value)) {
       setPrice(value);
-      setError(''); // Clear error if valid
+      setError('');
     } else {
       setError('Price must be a numeric value.');
     }
@@ -38,6 +38,12 @@ const AddItemForm = ({ categories, onAddItem }) => {
 
     if (selectedCategory) {
       onAddItem(selectedCategory, newItem);
+      toast.success('Item added successfully! 🎉', {
+        position: "top-right",
+      });
+      
+
+      // Clear form fields
       setTitle('');
       setType('veg');
       setPrice('');
@@ -45,7 +51,9 @@ const AddItemForm = ({ categories, onAddItem }) => {
       setImage('');
       setSelectedCategory('');
     } else {
-      console.error('Please select a category.');
+      toast.error('Please select a category.', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -129,4 +137,4 @@ const AddItemForm = ({ categories, onAddItem }) => {
   );
 };
 
-export default AddItemForm;
+export default AddItemForm;
