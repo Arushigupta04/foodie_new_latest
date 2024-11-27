@@ -88,19 +88,32 @@ function UserProfile() {
       : 'Invalid mobile number (must start with 6-9 and have 10 digits)';
   };
 
+  const validateName = (name) => {
+    if (name.length < 3) {
+      return 'Name must be at least 3 characters long';
+    }
+    if (name.length > 30) {
+      return 'Name must be no longer than 30 characters';
+    }
+    return ''; // No error
+  };
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedUserInfo({
       ...updatedUserInfo,
       [name]: value,
     });
-
+  
     if (name === 'email') {
       setErrors({ ...errors, email: validateEmail(value) });
     } else if (name === 'mobile') {
       setErrors({ ...errors, mobile: validateMobile(value) });
+    } else if (name === 'fullName') {
+      setErrors({ ...errors, fullName: validateName(value) });
     }
   };
+  
 
   const handleSave = async () => {
     if (errors.email || errors.mobile) {
@@ -190,41 +203,43 @@ function UserProfile() {
             </div>
             <h6 className="f-w-600">{user.role}</h6>
             {editMode ? (
-              <div>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="fullName"
-                  placeholder="Full Name"
-                  value={updatedUserInfo.fullName}
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="email"
-                  className="form-control mt-3"
-                  name="email"
-                  placeholder="Email"
-                  value={updatedUserInfo.email}
-                  onChange={handleInputChange}
-                />
-                {errors.email && <p className="text-white">{errors.email}</p>}
-                <input
-                  type="text"
-                  className="form-control mt-3"
-                  name="mobile"
-                  placeholder="Mobile"
-                  value={updatedUserInfo.mobile}
-                  onChange={handleInputChange}
-                />
-                {errors.mobile && <p className="text-white">{errors.mobile}</p>}
-              </div>
-            ) : (
-              <div>
-                <p>{user.fullName}</p>
-                <p>{user.email}</p>
-                <p>{user.mobile}</p>
-              </div>
-            )}
+  <div>
+    <input
+      type="text"
+      className="form-control"
+      name="fullName"
+      placeholder="Full Name"
+      value={updatedUserInfo.fullName}
+      onChange={handleInputChange}
+    />
+    {errors.fullName && <p className="text-white">{errors.fullName}</p>}
+    <input
+      type="email"
+      className="form-control mt-3"
+      name="email"
+      placeholder="Email"
+      value={updatedUserInfo.email}
+      onChange={handleInputChange}
+    />
+    {errors.email && <p className="text-white">{errors.email}</p>}
+    <input
+      type="text"
+      className="form-control mt-3"
+      name="mobile"
+      placeholder="Mobile"
+      value={updatedUserInfo.mobile}
+      onChange={handleInputChange}
+    />
+    {errors.mobile && <p className="text-white">{errors.mobile}</p>}
+  </div>
+) : (
+  <div>
+    <p>{user.fullName}</p>
+    <p>{user.email}</p>
+    <p>{user.mobile}</p>
+  </div>
+)}
+
             <button
               className="btn btn-light mt-3"
               onClick={editMode ? handleSave : handleEdit}

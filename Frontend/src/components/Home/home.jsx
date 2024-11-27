@@ -35,10 +35,10 @@ function HomePage() {
       <div className="divv2">
         <div className="div2">
           <div className="left">
-            <div className="card card1">
+            <div className="card card1#">
               <div className="heading">
                 <h3> <i className='bx bxs-bowl-hot'></i></h3>
-                <h2>2Cr+ Meals</h2>
+                <h2 >2Cr+ Meals</h2>
               </div>
               <div className="text">
                 <p>served and we are not stopping!</p>

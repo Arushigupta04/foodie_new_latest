@@ -21,6 +21,16 @@ const AddItemForm = ({ categories, onAddItem }) => {
     }
   };
 
+  const handleOfferChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || (/^\d+$/.test(value) && value >= 0 && value <= 100)) {
+      setOffer(value);
+      setError('');
+    } else {
+      setError('Offer must be a numeric value between 0 and 100.');
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (error) {
@@ -41,7 +51,6 @@ const AddItemForm = ({ categories, onAddItem }) => {
       toast.success('Item added successfully! 🎉', {
         position: "top-right",
       });
-      
 
       // Clear form fields
       setTitle('');
@@ -100,9 +109,10 @@ const AddItemForm = ({ categories, onAddItem }) => {
           type="text"
           id="offer"
           value={offer}
-          onChange={(e) => setOffer(e.target.value)}
+          onChange={handleOfferChange}
           className="form-input"
         />
+        {error && <p className="error-message">{error}</p>}
       </div>
       <div className="form-group">
         <label htmlFor="image" className="form-label">Image:</label>
@@ -137,4 +147,4 @@ const AddItemForm = ({ categories, onAddItem }) => {
   );
 };
 
-export default AddItemForm;
+export default AddItemForm;

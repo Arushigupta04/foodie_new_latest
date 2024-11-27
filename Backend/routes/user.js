@@ -67,8 +67,18 @@ router.post("/signup", async (req, res) => {
 
     const subject = 'Welcome to Our Service!';
     const text = `Hi ${fullName},\n\nThank you for signing up. We are excited to have you on board!`;
-    const html = `<p>Hi ${fullName},</p><p>Thank you for signing up. We are excited to have you on Foodie!</p>`;
-
+    //const html = `<p>Hi ${fullName},</p><p>Thank you for signing up. We are excited to have you on Foodie!</p>`;
+    const html = `
+    <div style="font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; padding: 20px; border-radius: 10px;">
+      <h1 style="color: #ffffff; text-align: center;">Welcome to Foodie!</h1>
+      <p>Hi ${fullName},</p>
+      <p style="margin-top: 10px;">Thank you for signing up. We are excited to have you on Foodie!</p>
+      <p style="color: #ffcc00; text-align: center; margin-top: 20px;">Let's get started on your food journey!</p>
+      <footer style="margin-top: 30px; text-align: center;">
+        <p style="font-size: 12px; color: #777777;">&copy; ${new Date().getFullYear()} Foodie. All rights reserved.</p>
+      </footer>
+    </div>`;
+  
     await sendEmail(email, subject, text, html);
 
     return res.status(201).send({ message: "User created successfully" });
@@ -147,8 +157,25 @@ router.post("/user/add-order", async (req, res) => {
     // Send confirmation email
     const subject = 'Order Confirmation';
     const text = `Hi ${user.fullName},\n\nYour order has been placed successfully. Your order details are as follows:\n\nName: ${name}\nPrice: ₹${price}\nDelivery Address: ${delivery_address}\nQuantity: ${quantity}\nPayment Method: ${payment_method}\n\nThank you for shopping with us!`;
-    const html = `<p>Hi ${user.fullName},</p><p>Your order has been placed successfully. Your order details are as follows:</p><ul><li>Name: ${name}</li><li>Price: ₹${price}</li><li>Delivery Address: ${delivery_address}</li><li>Quantity: ${quantity}</li><li>Payment Method: ${payment_method}</li></ul><p>Thank you for shopping with us!</p>`;
-
+   // const html = `<p>Hi ${user.fullName},</p><p>Your order has been placed successfully. Your order details are as follows:</p><ul><li>Name: ${name}</li><li>Price: ₹${price}</li><li>Delivery Address: ${delivery_address}</li><li>Quantity: ${quantity}</li><li>Payment Method: ${payment_method}</li></ul><p>Thank you for shopping with us!</p>`;
+   const html = `
+   <div style="font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; padding: 20px; border-radius: 10px;">
+     <h1 style="color: #ffffff; text-align: center;">Thank You for Your Order!</h1>
+     <p>Hi ${user.fullName},</p>
+     <p>Your order has been placed successfully. Your order details are as follows:</p>
+     <ul style="list-style-type: none; padding: 0;">
+       <li style="margin: 5px 0;"><strong>Name:</strong> ${name}</li>
+       <li style="margin: 5px 0;"><strong>Price:</strong> ₹${price}</li>
+       <li style="margin: 5px 0;"><strong>Delivery Address:</strong> ${delivery_address}</li>
+       <li style="margin: 5px 0;"><strong>Quantity:</strong> ${quantity}</li>
+       <li style="margin: 5px 0;"><strong>Payment Method:</strong> ${payment_method}</li>
+     </ul>
+     <p style="color: #ffcc00; text-align: center; margin-top: 20px;">Thank you for shopping with us!</p>
+     <footer style="margin-top: 30px; text-align: center;">
+       <p style="font-size: 12px; color: #777777;">&copy; ${new Date().getFullYear()} Foodie. All rights reserved.</p>
+     </footer>
+   </div>`;
+ 
     await sendEmail(email, subject, text, html);
 
     return res.status(201).json({ message: "Order added successfully", order });

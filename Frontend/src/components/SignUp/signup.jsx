@@ -18,7 +18,8 @@ const SignUp = () => {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validateMobile = (mobile) => /^[6-9][0-9]{9}$/.test(mobile);
-  const validateName = (name) => name.length <= 30;
+ const validateName = (name) => /^[A-Za-z]{3}/.test(name) && name.length >= 3
+
 
   const assessPasswordStrength = (password) => {
     if (password.length < 6) return "Weak";
@@ -44,7 +45,7 @@ const SignUp = () => {
     e.preventDefault();
 
     const errors = {};
-    if (!validateName(fullName)) errors.fullName = 'Full name should not exceed 30 characters.';
+    if (!validateName(fullName)) errors.fullName = 'First 3 letters should be alphabets and Full name should not exceed 30 characters.';
     if (!validateEmail(email)) errors.email = 'Invalid email format.';
     if (!validateMobile(mobile)) errors.mobile = 'Mobile number must be exactly 10 digits starting from 6-9.';
     if (passwordStrength === "Weak") errors.password = 'Password is too weak.';
@@ -98,29 +99,31 @@ const SignUp = () => {
         <h2 className="form-title">Sign up</h2>
         <form onSubmit={handleSubmit} className="register-form" id="register-form">
           <div className="form-group">
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Your Name"
-              value={fullName}
-              onChange={(e) => {
-                const value = e.target.value;
-                setFullName(value);
-                if (validateName(value)) {
-                  setValidationErrors((prev) => {
-                    const { fullName, ...rest } = prev;
-                    return rest;
-                  });
-                } else {
-                  setValidationErrors((prev) => ({
-                    ...prev,
-                    fullName: 'Full name should not exceed 30 characters.',
-                  }));
-                }
-              }}
-              className="border p-2 rounded w-full"
-            />
-            {validationErrors.fullName && <p className="error-text">{validationErrors.fullName}</p>}
+          <input
+  type="text"
+  name="fullName"
+  placeholder="Your Name"
+  value={fullName}
+  onChange={(e) => {
+    const value = e.target.value;
+    setFullName(value);
+    if (validateName(value)) {
+      setValidationErrors((prev) => {
+        const { fullName, ...rest } = prev;
+        return rest;
+      });
+    } else {
+      setValidationErrors((prev) => ({
+        ...prev,
+        fullName: 'Full name must be between 3 and 30 characters.',
+      }));
+    }
+  }}
+  className="border p-2 rounded w-full"
+/>
+
+{validationErrors.fullName && <p className="error-text">{validationErrors.fullName}</p>}
+
           </div>
           <div className="form-group">
             <input
@@ -197,7 +200,7 @@ const SignUp = () => {
             />
             {validationErrors.repeatedPassword && <p className="error-text">{validationErrors.repeatedPassword}</p>}
           </div>
-          <div className="form-group checkbox-group">
+          {/* <div className="form-group checkbox-group">
             <label>
               <input
                 type="checkbox"
@@ -208,7 +211,7 @@ const SignUp = () => {
               />
               Admin
             </label>
-          </div>
+          </div> */}
           <div className="form-group form-button">
             <input type="submit" name="signup" className="form-submit" value="Register" />
           </div>

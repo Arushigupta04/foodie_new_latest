@@ -2,7 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const cors = require("cors");
-
+const Review = require('./models/reviewModel');
 const app = express();
 const PORT = 5000;
 const HOST = "192.168.54.63";
@@ -34,8 +34,16 @@ app.use(cors());
 app.use("/api/add-new/", itemRouter);
 app.use("/api", userRouter);
 app.use("/api/v1/pay", paymentRoutes);
-app.use("/api/review", reviewRoutes); // Add review routes
-
+app.use("/api/review", reviewRoutes); 
+app.get('/api/reviews/count', async (req, res) => {
+  try {
+    // Get the count of reviews in the database
+    const reviewsCount = await Review.countDocuments(); // Use your DB model here
+    res.json({ count: reviewsCount });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch reviews count' });
+  }
+});
 // Test route
 app.get("/test", (req, res) => {
   return res.send("Testing server...");

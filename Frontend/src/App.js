@@ -30,7 +30,6 @@ function App() {
     const token = cookies.token;
 
     if (!token) {
-      console.error('No token found');
       setLoading(false);
       return;
     }
@@ -71,8 +70,18 @@ function App() {
       return <Navigate to="/sign-in" replace />;
     }
 
-    if (user.role !== 'Admin') {
-      return <Navigate to="/" replace />;
+    return children;
+  };
+
+  // PublicRoute component
+  const PublicRoute = ({ children }) => {
+    if (loading) {
+      return <div>Loading...</div>; // Optional: Replace with a spinner/loader.
+    }
+
+    if (user) {
+      // Redirect users based on their roles
+      return user.role === 'Admin' ? <Navigate to="/admin" replace /> : <Navigate to="/" replace />;
     }
 
     return children;
@@ -84,58 +93,76 @@ function App() {
         <div className="main-body">
           <NavBar />
           <Routes>
-  <Route path="/" element={<><Home /><Footer /></>} />
-  <Route path="/menu" element={<><MenuPage /><Footer /></>} />
-  <Route path="/sign-in" element={<Login />} />
-  <Route path="/sign-up" element={<SignUp />} />
-  <Route path="/profile" element={<UserProfile />} />
-  <Route path="/cart" element={<ShoppingCart />} />
-  <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
+            {/* Public Routes */}
+            <Route 
+              path="/sign-in" 
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="/sign-up" 
+              element={
+                <PublicRoute>
+                  <SignUp />
+                </PublicRoute>
+              } 
+            />
 
-  {/* Admin Protected Routes */}
-  <Route 
-    path="/admin" 
-    element={
-      <ProtectedRoute>
-        <><AdminDashboard /><Footer /></>
-      </ProtectedRoute>
-    } 
-  />
-  <Route 
-    path="/admin/add-items" 
-    element={
-      <ProtectedRoute>
-        <><AddItem /><Footer /></>
-      </ProtectedRoute>
-    } 
-  />
-  <Route 
-    path="/admin/categories" 
-    element={
-      <ProtectedRoute>
-        <><AllCategories /><Footer /></>
-      </ProtectedRoute>
-    } 
-  />
-  <Route 
-    path="/admin/categories1" 
-    element={
-      <ProtectedRoute>
-        <><AllCategories1 /><Footer /></>
-      </ProtectedRoute>
-    } 
-  />
-  <Route 
-    path="/admin/Review" 
-    element={
-      <ProtectedRoute>
-        <><Reviews/><Footer /></>
-      </ProtectedRoute>
-    } 
-  />
+            {/* Regular Routes */}
+            <Route path="/" element={<><Home /><Footer /></>} />
+            <Route path="/menu" element={<><MenuPage /><Footer /></>} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
 
-  <Route path="*" element={<ErrorPage />} />
-</Routes>
+            {/* Admin Protected Routes */}
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <><AdminDashboard /><Footer /></>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/add-items" 
+              element={
+                <ProtectedRoute>
+                  <><AddItem /><Footer /></>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/categories" 
+              element={
+                <ProtectedRoute>
+                  <><AllCategories /><Footer /></>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/categories1" 
+              element={
+                <ProtectedRoute>
+                  <><AllCategories1 /><Footer /></>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/Review" 
+              element={
+                <ProtectedRoute>
+                  <><Reviews /><Footer /></>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Fallback Route */}
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
 
           <ToastContainer />
         </div>
@@ -144,4 +171,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;

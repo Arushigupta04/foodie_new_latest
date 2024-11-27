@@ -8,12 +8,27 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cookies, setCookie] = useCookies(['cart']);
   const [cartItems, setCartItems] = useState(cookies.cart || []);
+  const [maxLimitNotified, setMaxLimitNotified] = useState({}); // Tracks notification flags for each item and total cart
 
   useEffect(() => {
     setCookie('cart', cartItems, { path: '/' });
   }, [cartItems, setCookie]);
 
+  const getTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
   const addItemToCart = (item) => {
+    const totalItems = getTotalItems();
+
+    if (totalItems >= 60) {
+      if (!maxLimitNotified['total']) {
+        toast.warning('Cart limit reached! A maximum of 60 items can be added.');
+        setMaxLimitNotified((prev) => ({ ...prev, total: true })); // Notify the user only once
+      }
+      return;
+    }
+
     const existingItemIndex = cartItems.findIndex((cartItem) => cartItem._id === item._id);
 
     if (existingItemIndex !== -1) {
@@ -21,18 +36,22 @@ export const CartProvider = ({ children }) => {
       const updatedQuantity = updatedCart[existingItemIndex].quantity + 1;
 
       if (updatedQuantity > 30) {
-        toast.warning('No more items can be added');
+        if (!maxLimitNotified[item._id]) {
+          toast.warning('No more than 30 of the same item can be added.');
+          setMaxLimitNotified((prev) => ({ ...prev, [item._id]: true }));
+        }
       } else {
         updatedCart[existingItemIndex] = {
           ...updatedCart[existingItemIndex],
           quantity: updatedQuantity,
         };
         setCartItems(updatedCart);
-        toast.info(`${item.item_title} quantity increased`);
+        toast.info(`${item.item_title} quantity increased.`);
+        setMaxLimitNotified((prev) => ({ ...prev, [item._id]: false }));
       }
     } else {
       setCartItems([...cartItems, { ...item, quantity: 1 }]);
-      toast.success(`${item.item_title} added to cart`);
+      toast.success(`${item.item_title} added to cart.`);
     }
   };
 
@@ -41,22 +60,40 @@ export const CartProvider = ({ children }) => {
     const updatedCart = cartItems.filter((item) => item._id !== itemId);
     setCartItems(updatedCart);
     if (itemToRemove) {
-      toast.error(`${itemToRemove.item_title} removed from cart`);
+      toast.error(`${itemToRemove.item_title} removed from cart.`);
     }
+    setMaxLimitNotified((prev) => {
+      const { [itemId]: _, ...rest } = prev; // Remove notification flag for the item
+      return rest;
+    });
   };
 
   const increaseItemQuantity = (itemId) => {
+    const totalItems = getTotalItems();
+
+    if (totalItems >= 60) {
+      if (!maxLimitNotified['total']) {
+        toast.warning('Cart limit reached! A maximum of 60 items can be added.');
+        setMaxLimitNotified((prev) => ({ ...prev, total: true }));
+      }
+      return;
+    }
+
     const updatedCart = cartItems.map((item) =>
       item._id === itemId ? { ...item, quantity: Math.min(item.quantity + 1, 30) } : item
     );
 
     const item = updatedCart.find((item) => item._id === itemId);
     setCartItems(updatedCart);
-    
+
     if (item.quantity === 30) {
-      toast.warning('No more items can be added');
+      if (!maxLimitNotified[itemId]) {
+        toast.warning('No more than 30 of the same item can be added.');
+        setMaxLimitNotified((prev) => ({ ...prev, [itemId]: true }));
+      }
     } else {
-      toast.info('Item quantity increased');
+      toast.info('Item quantity increased.');
+      setMaxLimitNotified((prev) => ({ ...prev, [itemId]: false }));
     }
   };
 
@@ -69,7 +106,8 @@ export const CartProvider = ({ children }) => {
           item._id === itemId ? { ...item, quantity: item.quantity - 1 } : item
         );
         setCartItems(updatedCart);
-        toast.info('Item quantity decreased');
+        toast.info('Item quantity decreased.');
+        setMaxLimitNotified((prev) => ({ ...prev, [itemId]: false }));
       } else {
         removeItemFromCart(itemId);
       }
@@ -78,7 +116,8 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
-    toast.success('Cart cleared');
+    toast.success('Cart cleared.');
+    setMaxLimitNotified({}); // Reset all notification flags
   };
 
   const getCartTotal = () => {
@@ -99,5 +138,5 @@ export const CartProvider = ({ children }) => {
     >
       {children}
     </CartContext.Provider>
-  );
+  );
 };

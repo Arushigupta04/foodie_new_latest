@@ -3,7 +3,7 @@ const reviewSchema = new mongoose.Schema({
     email: {
       type: String,
       required: true,
-      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Email validation regex
+      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
     },
     rating: {
       type: Number,

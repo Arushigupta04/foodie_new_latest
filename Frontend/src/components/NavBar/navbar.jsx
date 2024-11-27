@@ -91,7 +91,7 @@ function Navbar() {
           </div>
           <div className="discount-box btn-box border-right">
             <a href="/menu" className='anchorTag'><img src={discountIcon} alt="" className="icon-svg btn-icon" />
-              <p>Deals</p></a>
+              <p>Menu</p></a>
           </div>
           <div className="shopping-cart-box btn-box border-right shopping-cart-box-float">
             <a href="/cart" className='anchorTag'><img src={cartIcon} alt="" className="icon-svg btn-icon" />

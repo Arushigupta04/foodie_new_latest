@@ -6,7 +6,7 @@ const OrderConfirmation = ({ orderDetails, orderId }) => {
   
   useEffect(() => {
     toast.success('Your order has been successfully placed!');
-  }, []);
+  },[]);
   
   return (
     <div className="card mb-4">

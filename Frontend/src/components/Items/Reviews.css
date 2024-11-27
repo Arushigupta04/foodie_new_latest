@@ -1,0 +1,112 @@
+/* Container for the entire reviews section */
+.containerR {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+  
+  /* Title styling */
+  .titleR {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #1d4ed8;
+  }
+  
+  /* Error message styling */
+  .errorR {
+    font-size: 1.4rem;
+    text-align: center;
+    color: #6b7280;
+    margin-top: 20px;
+  }
+  
+  /* Grid layout for the cards */
+  .gridR {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px; /* Space between cards */
+    justify-content: center;
+  }
+  
+  /* Card styling */
+  .cardR {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .cardR:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Quotation icon styling */
+  .iconWrapperR {
+    font-size: 60px;
+    color: #ffa500; /* Orange color */
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  /* Stars (rating) styling */
+  .ratingR {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  
+  .starR {
+    font-size: 20px;
+    color: #ccc; /* Grey for unfilled stars */
+    margin: 0 2px;
+  }
+  
+  .filledR {
+    color: #ffd700; /* Gold for filled stars */
+  }
+  
+  /* Review text styling */
+  .textR {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 0 15px; /* Padding for better text spacing */
+  }
+  
+  /* Reviewer name/email styling */
+  .authorR {
+    font-size: 14px;
+    color: #555;
+    font-style: italic;
+    text-align: right;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 1024px) {
+    .gridR {
+      gap: 20px; /* Adjust spacing between cards for medium screens */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .gridR {
+      grid-template-columns: 1fr; /* Stack cards vertically on smaller screens */
+    }
+  
+    .cardR {
+      width: 90%; /* Make cards take up most of the screen width */
+      margin: 0 auto; /* Center cards */
+    }
+  }
+  
