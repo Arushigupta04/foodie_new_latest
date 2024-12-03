@@ -61,17 +61,23 @@ function App() {
   }, []);
 
   // ProtectedRoute component
-  const ProtectedRoute = ({ children }) => {
+  const ProtectedRoute = ({ children, isAdminRoute }) => {
     if (loading) {
-      return <div>Loading...</div>;
+      return <div>Loading...</div>; // Optionally replace with a spinner or loader component
     }
-
+  
     if (!user) {
       return <Navigate to="/sign-in" replace />;
     }
-
+  
+    // Check if the route is admin-protected and if the user has the Admin role
+    if (isAdminRoute && user.role !== 'Admin') {
+      return <Navigate to="/" replace />;
+    }
+  
     return children;
   };
+  
 
   // PublicRoute component
   const PublicRoute = ({ children }) => {
@@ -81,7 +87,7 @@ function App() {
 
     if (user) {
       // Redirect users based on their roles
-      return user.role === 'Admin' ? <Navigate to="/admin" replace /> : <Navigate to="/" replace />;
+      return user.role === 'Admin' ? <Navigate to="/" replace /> : <Navigate to="/" replace />;
     }
 
     return children;
@@ -92,77 +98,78 @@ function App() {
       <Router>
         <div className="main-body">
           <NavBar />
+          
           <Routes>
-            {/* Public Routes */}
-            <Route 
-              path="/sign-in" 
-              element={
-                <PublicRoute>
-                  <Login />
-                </PublicRoute>
-              } 
-            />
-            <Route 
-              path="/sign-up" 
-              element={
-                <PublicRoute>
-                  <SignUp />
-                </PublicRoute>
-              } 
-            />
+  {/* Public Routes */}
+  <Route 
+    path="/sign-in" 
+    element={
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    } 
+  />
+  <Route 
+    path="/sign-up" 
+    element={
+      <PublicRoute>
+        <SignUp />
+      </PublicRoute>
+    } 
+  />
 
-            {/* Regular Routes */}
-            <Route path="/" element={<><Home /><Footer /></>} />
-            <Route path="/menu" element={<><MenuPage /><Footer /></>} />
-            <Route path="/profile" element={<UserProfile />} />
-            <Route path="/cart" element={<ShoppingCart />} />
-            <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
+  {/* Regular Routes */}
+  <Route path="/" element={<><Home /><Footer /></>} />
+  <Route path="/menu" element={<><MenuPage /><Footer /></>} />
+  <Route path="/profile" element={<UserProfile />} />
+  <Route path="/cart" element={<ShoppingCart />} />
+  <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
 
-            {/* Admin Protected Routes */}
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute>
-                  <><AdminDashboard /><Footer /></>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/admin/add-items" 
-              element={
-                <ProtectedRoute>
-                  <><AddItem /><Footer /></>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/admin/categories" 
-              element={
-                <ProtectedRoute>
-                  <><AllCategories /><Footer /></>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/admin/categories1" 
-              element={
-                <ProtectedRoute>
-                  <><AllCategories1 /><Footer /></>
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/admin/Review" 
-              element={
-                <ProtectedRoute>
-                  <><Reviews /><Footer /></>
-                </ProtectedRoute>
-              } 
-            />
+  {/* Admin Protected Routes */}
+  <Route 
+    path="/admin" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+        <><AdminDashboard /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/add-items" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+        <><AddItem /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/categories" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+        <><AllCategories /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/categories1" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+        <><AllCategories1 /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/Review" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+        <><Reviews /><Footer /></>
+      </ProtectedRoute>
+    } 
+  />
 
-            {/* Fallback Route */}
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
+  {/* Fallback Route */}
+  <Route path="*" element={<ErrorPage />} />
+</Routes>
 
           <ToastContainer />
         </div>

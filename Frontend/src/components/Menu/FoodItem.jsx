@@ -11,12 +11,21 @@ const FoodItem = ({ item }) => {
   const foodTypeClass = item_type === "veg" ? "type-veg" : "type-nonveg";
   const { addItemToCart, cartItems, increaseItemQuantity, decreaseItemQuantity, removeItemFromCart } = useContext(CartContext);
   const { user } = useUser();
+  console.log(user)
 
   const handleAddToCart = () => {
-    if (user) {
+    if(user){
+
+    
+    if (user.role!=="Admin") {
       addItemToCart(item);
       // toast.success(`${item_title} added to cart`); // Show success toast
-    } else {
+    }
+    else if(user.role==="Admin"){
+      toast.info("Admin is not able to add items in Cart"); 
+    }
+  }
+     else {
       toast.info("Please Sign In to Add Items to your Cart."); // Show info toast
     }
   };

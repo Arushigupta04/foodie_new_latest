@@ -93,7 +93,9 @@
 .signup-image .signup-image-link:hover {
   color: #a06d26;
 }
-
+.sign-up-link{
+cursor: pointer;
+}
 .already-signup {
   display: flex;
   justify-content: center;
@@ -107,6 +109,7 @@
   margin-bottom: 25px;
   border: none;
   background-color: white;
+ 
 }
 
 @media screen and (max-width: 768px) {
@@ -146,4 +149,55 @@
   color: red;
   font-size: 0.875rem; /* Optional for smaller error text */
   margin-top: 4px; /* Adds a little spacing between input and error text */
+}
+
+
+
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+input[type="password"], input[type="text"] {
+  padding-right: 30px; /* Give space for the eye icon */
+}
+
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Adjust right to space the icon properly */
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1;
+}
+.eye-icon1 {
+  position: absolute;
+  top: 33%;
+  right: 10px; /* Adjust right to space the icon properly */
+  transform: translateY(-40%);
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1;
+}
+
+.password-strength {
+  font-size: 14px;
+  color: #888;
+}
+
+.password-strength.weak {
+  color: red;
+}
+
+.password-strength.moderate {
+  color: orange;
+}
+
+.password-strength.strong {
+  color: green;
+}
+
+.password-strength.very-strong {
+  color: darkgreen;
 }

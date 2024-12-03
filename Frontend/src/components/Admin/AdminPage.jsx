@@ -55,33 +55,96 @@ function AdminDashboard() {
     fetchUsers();
     fetchOrders();
   }, []);
-  const handleDelete = async (email) => {
-    //if (window.confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
-      try {
-        const response = await fetch(`http://localhost:5000/api/user`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
+  const handleDelete = async (email, role) => {
+    // Prevent deleting Admin users
+    if (role === "Admin") {
+      toast.error("Admin cannot be deleted!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          borderRadius: "8px",          // Rounded corners
+          backgroundColor: "#fff",     // White background
+          color: "#000",               // Black text for readability
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
+        },
+      });
+      return; // Exit the function early
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/user`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        toast.success(data.message || "User deleted successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            borderRadius: "8px",
+            backgroundColor: "#fff",    // White background
+            color: "#000",             // Black text for readability
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
           },
-          body: JSON.stringify({ email }),
         });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          toast.success(data.message || "User deleted successfully");
-          // Refetch the user list after deletion
-          // fetchUsers();
-          // fetchUsers();
-        } else {
-          toast.error(data.error || "Failed to delete user");
-        }
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        toast.error("An error occurred while deleting the user");
+  
+        // Optionally refetch the user list or update the state
+        // fetchUsers();
+      } else {
+        toast.error(data.error || "Failed to delete user", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            borderRadius: "8px",
+            backgroundColor: "#fff",    // White background
+            color: "#000",             // Black text for readability
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
+          },
+        });
       }
-   // }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("An error occurred while deleting the user", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          borderRadius: "8px",
+          backgroundColor: "#fff",    // White background
+          color: "#000",             // Black text for readability
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
+        },
+      });
+    }
   };
+  
+  
+  
   const totalEarnings = orders.reduce((total, order) => {
     return total + (parseFloat(order.price) * parseInt(order.quantity));
   }, 0);
@@ -383,27 +446,26 @@ function AdminDashboard() {
             <tbody>
   {users.map((user) => (
     <tr key={user._id}>
-      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.fullName}</td>
-      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.email}</td>
-      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.role}</td>
-      <td style={{ border: "1px solid gray", padding: "10px", textAlign: "center" }}>
+      <td>{user.fullName}</td>
+      <td>{user.email}</td>
+      <td>{user.role}</td>
+      <td style={{ textAlign: "center" }}>
         <button
-          onClick={() => handleDelete(user.email)}
+          onClick={() => handleDelete(user.email, user.role)}
           style={{
             border: "1px solid gray",
-            backgroundColor: "#007bff", // Same blue as header
-            color: "white",            // White text
-            padding: "5px 10px",       // Padding for spacing
-            borderRadius: "4px",       // Rounded corners for a polished look
-            cursor: "pointer",         // Pointer cursor for better UX
-            textAlign: "center",       // Center text within button
+            backgroundColor: "#007bff",
+            color: "white",
+            padding: "5px 10px",
+            borderRadius: "4px",
+            cursor: "pointer",
           }}
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = "red"; // Highlight in red on hover
+            e.target.style.backgroundColor = "red";
             e.target.style.color = "white";
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#007bff"; // Reset to blue
+            e.target.style.backgroundColor = "#007bff";
             e.target.style.color = "white";
           }}
         >
@@ -413,6 +475,7 @@ function AdminDashboard() {
     </tr>
   ))}
 </tbody>
+
 
           </table>
         </div>
