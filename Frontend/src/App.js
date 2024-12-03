@@ -19,6 +19,7 @@ import AllCategories from './components/Items/AllCategories.jsx';
 import AllCategories1 from './components/Items/AllCategories1.jsx';
 import { useCookies } from 'react-cookie';
 import Reviews from './components/Items/Reviews.jsx';
+import AllrectOrder from './components/Items/AllrectOrder.jsx';
 
 function App() {
   const [cookies] = useCookies(['token']);
@@ -162,7 +163,19 @@ function App() {
     path="/admin/Review" 
     element={
       <ProtectedRoute isAdminRoute={true}>
-        <><Reviews /><Footer /></>
+       <>
+       <Reviews /><Footer />
+       </> 
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/alrect" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+      <>
+      <AllrectOrder/><Footer />
+      </>
       </ProtectedRoute>
     } 
   />
