@@ -5,24 +5,32 @@ const Review = require("../models/reviewModel");
 
 // Middleware to check if the user is logged in and extract their role
 const authenticateUser = (req, res, next) => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
-  console.log("dfdcfv"+token)
-  if (!token) {
+  const authHeader = req.header("Authorization");
+  if (!authHeader) {
     return res.status(401).json({ message: "Access denied. No token provided." });
   }
-  
+
+  // Extract token from "Bearer <token>" format
+  const token = authHeader.replace("Bearer ", "").trim();
+
+  if (!token) {
+    return res.status(401).json({ message: "Access denied. Token is missing." });
+  }
+
   try {
-    // Decode token and verify with secret
+    // Decode token and verify with the secret
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // Attach user info to req.user
+    console.log("Authenticated user:", decoded); // Debugging log
     next();
   } catch (error) {
+    console.error("Token verification failed:", error.message);
     return res.status(401).json({ message: "Invalid or expired token." });
   }
 };
 
 // POST: Submit a review
-router.post("/submit",authenticateUser,  async (req, res) => {
+router.post("/submit", authenticateUser, async (req, res) => {
   const { email, rating, reviewText } = req.body;
 
   // Restrict admins from submitting reviews
@@ -35,6 +43,7 @@ router.post("/submit",authenticateUser,  async (req, res) => {
     return res.status(400).json({ message: "Email, rating, and review text are required." });
   }
 
+  // Validate email format
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ message: "Invalid email format." });
   }

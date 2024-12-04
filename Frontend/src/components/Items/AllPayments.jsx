@@ -67,7 +67,7 @@ const AllPayments = () => {
             >
               {/* Divide amount by 100 if it's in cents */}
               <h2 className="text-xl font-semibold mb-2">
-                Amount: {order.amount ? (order.amount / 100).toFixed(2) : "N/A"}
+                Amount: {order.amount ?order.amount : "N/A"}
               </h2>
               <h2 className="text-xl font-semibold mb-2">Date: {new Date(order.date).toLocaleDateString()}</h2>
               <p className="text-gray-700">User ID: {order.user?._id || "Not Available"}</p>
