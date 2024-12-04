@@ -39,14 +39,14 @@ function Footer() {
     e.preventDefault();
 
     // Check if the entered email is 'johnadmin@gmail.com'
-    if (reviewEmail === 'arushigupta7492@gmail.com' || reviewEmail === 'admine.com') {
+    if (user.role==='Admin') {
       setAdminErrorMessage('Admins cannot submit reviews.');
       setSignInErrorMessage('');
       setThankYouMessage('');
       setErrorMessage('');
       return;
     }
-    console.log(user)
+    console.log("user"+user)
     // Check if the user is authenticated
     if (!user) {
       setErrorMessage('');
@@ -71,13 +71,13 @@ function Footer() {
       rating: rating,
       reviewText: review,
     };
-
+    const token=localStorage.getItem('token')
     try {
       const response = await fetch('http://localhost:5000/api/review/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`, // Include token for authentication
+          Authorization: `Bearer ${token}`, // Include token for authentication
         },
         body: JSON.stringify(reviewData),
       });

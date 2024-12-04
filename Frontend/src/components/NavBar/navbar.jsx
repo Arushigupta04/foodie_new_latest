@@ -25,6 +25,7 @@ function Navbar() {
 
   const handleSignOut = () => {
     removeCookie('token', { path: '/' });
+    localStorage.removeItem('token');
     updateUser(null);
     
     clearCart();

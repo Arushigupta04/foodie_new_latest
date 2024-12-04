@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const secret = "$kRa&t$p";
+// const secret = "$kRa&t$p";
 
 function generateTokenForUser(user){
     const payload = {
@@ -10,12 +10,12 @@ function generateTokenForUser(user){
         role:user.role,
         mobile:user.mobile,
     }
-    const token = jwt.sign(payload,secret);
+    const token = jwt.sign(payload,process.env.secret);
     return token;
 }
 
 function validateToken(token){
-    const user = jwt.verify(token,secret);
+    const user = jwt.verify(token,process.env.secret);
     return user;
 }
 
