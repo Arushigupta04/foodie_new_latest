@@ -56,7 +56,7 @@ const Checkout = ({ totalAmount, handlePayment }) => {
     setMessage('');
 
     if (address.trim() === '' || email.trim() === '') {
-      setMessage('Please enter your delivery address and email.');
+      setMessage('Please enter your delivery address .');
       return;
     }
     if (!isValidEmail(email)) {
@@ -83,7 +83,7 @@ const Checkout = ({ totalAmount, handlePayment }) => {
       // Initialize Razorpay payment
       const options = {
         key: 'rzp_test_XaigqT7nptLPme', // Replace with your Razorpay API key
-        amount: order.amount, // Amount in paise
+        amount: order.amount*100, // Amount in paise
         currency: order.currency,
         name: 'Foodie', // Your company or website name
         description: 'Invoice Payment', // A brief description
@@ -176,7 +176,7 @@ const Checkout = ({ totalAmount, handlePayment }) => {
               onChange={handlePaymentMethodChange}
             >
               <option value="COD">Cash on Delivery</option>
-              <option value="Pay On Delivery">Pay Online</option>
+              <option value="Pay Online">Pay Online</option>
             </select>
           </div>
           <p><strong>Total Amount: ₹{totalAmount}</strong></p>
