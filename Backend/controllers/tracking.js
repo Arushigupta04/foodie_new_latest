@@ -75,12 +75,12 @@ const getTracking = async (req, res) => {
 };
 
 // Controller functions for specific tracking actions
-const logPreparation = async (req, res) => {
+const Received = async (req, res) => {
     console.log("sdf")
     try {
         console.log("wsdf")
         console.log(req.user)
-        const tracking = await logAction(req.params.id, 'preparation', req.user.fullName);
+        const tracking = await logAction(req.params.id, 'received', req.user.fullName);
         console.log("tracking", tracking)
         res.status(201).json(tracking);
     } catch (error) {
@@ -89,18 +89,18 @@ const logPreparation = async (req, res) => {
     }
 };
 
-const logDelivery = async (req, res) => {
+const Accepted = async (req, res) => {
     try {
-        const tracking = await logAction(req.params.id, 'delivery', req.user.fullName);
+        const tracking = await logAction(req.params.id, 'accepted', req.user.fullName);
         res.status(201).json(tracking);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-const logOrder = async (req, res) => {
+const Prepared = async (req, res) => {
     try {
-        const tracking = await logAction(req.params.id, 'order', req.user.fullName);
+        const tracking = await logAction(req.params.id, 'prepared', req.user.fullName);
         res.status(201).json(tracking);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -130,9 +130,10 @@ module.exports = {
     updateItem,
     deleteItem,
     getTracking,
-    logPreparation,
-    logDelivery,
-    logOrder,
+    Received,
+    Accepted,
+   
+    Prepared,
     logOutForDelivery,
     logDelivered,
 };
