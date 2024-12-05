@@ -1,7 +1,6 @@
 // src/components/TrackingPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
 const API_URL = 'http://localhost:5000'; // Replace with your backend URL
 
@@ -13,11 +12,16 @@ const TrackingPage = () => {
 
     const fetchTracking = async () => {
         try {
-            const response = await axios.get(`${API_URL}/items/${id}/tracking`, {
+            const response = await fetch(`${API_URL}/api/tracking/items/${id}/tracking`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
-            console.log(tracking)
-            setTracking(response.data);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setTracking(data);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching tracking data:', error);
@@ -27,19 +31,24 @@ const TrackingPage = () => {
 
     const fetchUserRole = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/user`, {
+            const response = await fetch(`${API_URL}/api/user`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
-            console.log(response.data.role)
-            setUserRole(response.data.role);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setUserRole(data.role);
         } catch (error) {
-            console.error('+Error fetching user role:', error);
+            console.error('Error fetching user role:', error);
         }
     };
 
     const handleLogAction = async (action) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/tracking/items/${id}/${action}`, {
+            const response = await fetch(`${API_URL}/api/tracking/items/${id}/${action}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,18 +56,17 @@ const TrackingPage = () => {
                 },
                 body: JSON.stringify({}) // Empty object as body if required
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             // Re-fetch the tracking data
             fetchTracking();
         } catch (error) {
             console.error('Error logging action:', error);
         }
     };
-    
 
     useEffect(() => {
         fetchTracking();
@@ -72,7 +80,8 @@ const TrackingPage = () => {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Tracking Information</h1>
-            {userRole === 'Admin' && (
+            {userRole === 'Admin' &&
+             (
                 <div className="mb-4">
                     <button
                         className="bg-red-500 text-black px-4 py-2 rounded mr-2"
@@ -106,7 +115,7 @@ const TrackingPage = () => {
                     </button>
                 </div>
             )}
-            <div className="bg-black shadow-md rounded p-4">
+            <div className="bg-white shadow-md rounded p-4">
                 <h2 className="text-xl font-semibold mb-2">Tracking History</h2>
                 <ul>
                     {tracking.map((track) => (

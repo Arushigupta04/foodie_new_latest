@@ -280,6 +280,36 @@ function UserProfile() {
                           <h6>Ordered At:</h6>
                           <p>&nbsp;&nbsp;{order.createdAt}</p>
                         </div>
+                        <div className="col-auto mt-4">
+                <a
+                  href={`http://localhost:3000/tracking/${order._id}`}
+                  className="bg-blue-500 text-white px-4 py-2 rounded block text-center"
+                  style={{
+                    fontSize: "18px",
+                    padding: "15px 30px",
+                    width: "200px",
+                    height: "60px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: "30px",
+                    display: "block",
+                    borderRadius: "8px",
+                    textDecoration: "none",
+                    transition: "background-color 0.3s ease, transform 0.2s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = "#0056b3";
+                    e.target.style.transform = "scale(1.05)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = "#007bff";
+                    e.target.style.transform = "scale(1)";
+                  }}
+                >
+                  Track Order
+                </a>
+              </div>
                       </div>
                     </div>
                   </div>

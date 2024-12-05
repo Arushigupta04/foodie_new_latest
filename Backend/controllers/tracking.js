@@ -79,8 +79,9 @@ const logPreparation = async (req, res) => {
     console.log("sdf")
     try {
         console.log("wsdf")
-        
-        const tracking = await logAction(req.params.id, 'preparation', "sdcfd");
+        console.log(req.user)
+        const tracking = await logAction(req.params.id, 'preparation', req.user.fullName);
+        console.log("tracking", tracking)
         res.status(201).json(tracking);
     } catch (error) {
         console.log(error)
@@ -90,7 +91,7 @@ const logPreparation = async (req, res) => {
 
 const logDelivery = async (req, res) => {
     try {
-        const tracking = await logAction(req.params.id, 'delivery', req.user.username);
+        const tracking = await logAction(req.params.id, 'delivery', req.user.fullName);
         res.status(201).json(tracking);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -99,7 +100,7 @@ const logDelivery = async (req, res) => {
 
 const logOrder = async (req, res) => {
     try {
-        const tracking = await logAction(req.params.id, 'order', req.user.username);
+        const tracking = await logAction(req.params.id, 'order', req.user.fullName);
         res.status(201).json(tracking);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -108,7 +109,7 @@ const logOrder = async (req, res) => {
 
 const logOutForDelivery = async (req, res) => {
     try {
-        const tracking = await logAction(req.params.id, 'out for delivery', req.user.username);
+        const tracking = await logAction(req.params.id, 'out for delivery',req.user.fullName);
         res.status(201).json(tracking);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -117,7 +118,7 @@ const logOutForDelivery = async (req, res) => {
 
 const logDelivered = async (req, res) => {
     try {
-        const tracking = await logAction(req.params.id, 'delivered', req.user.username);
+        const tracking = await logAction(req.params.id, 'delivered', req.user.fullName);
         res.status(201).json(tracking);
     } catch (error) {
         res.status(400).json({ message: error.message });
