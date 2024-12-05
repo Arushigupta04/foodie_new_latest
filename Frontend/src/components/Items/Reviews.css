@@ -1,8 +1,14 @@
 /* Container for the entire reviews section */
+.gradient-background {
+  background: linear-gradient(to left, #fff3e0, #ffcc80); 
+  /* Light gradient background */
+  display: flex;
+}
 .containerR {
     max-width: 1200px;
     margin: 0 auto;
     padding: 30px;
+
   }
   
   /* Title styling */
