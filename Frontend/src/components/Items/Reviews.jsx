@@ -24,6 +24,7 @@ const Reviews = () => {
   }, []);
 
   return (
+  <div className="gradient-background">
     <div className="containerR">
       <h1 className="titleR">Reviews</h1>
       {error && <p className="errorR">{error}</p>}
@@ -50,6 +51,7 @@ const Reviews = () => {
           <p className="errorR">No reviews available.</p>
         )}
       </div>
+    </div>
     </div>
   );
 };
