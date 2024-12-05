@@ -13,7 +13,7 @@ const TrackingPage = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [completedActions, setCompletedActions] = useState({});
 
-    const actions = ['preparation', 'delivery', 'order', 'out-for-delivery', 'delivered'];
+    const actions = ['Received', 'Accepted', 'Prepared', 'Out-for-delivery', 'Delivered'];
 
     // Fetch tracking data from the backend
     const fetchTracking = async () => {
