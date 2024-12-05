@@ -132,13 +132,15 @@ function App() {
 
 
   {/* Admin Protected Routes */}
-  <Route path="/tracking/:id"
-  element={
-<ProtectedRoute isAdminRoute={true}>
-<><Tracking/><Footer /></>
-</ProtectedRoute>
-  }
-  />
+  <Route 
+              path="/tracking/:id"
+              element={
+                <ProtectedRoute>
+                  <Tracking />
+                  <Footer />
+                </ProtectedRoute>
+              }
+            />
   <Route 
     path="/admin" 
     element={
