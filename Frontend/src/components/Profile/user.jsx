@@ -582,7 +582,7 @@ function UserProfile() {
                   className="bg-blue-500 text-white px-4 py-2 rounded block text-center"
                   style={{
                     fontSize: "20px",
-                    padding: "13px 25px",
+                    padding: "13px 20px",
                     width: "170px",
                     height: "50px",
                     backgroundColor: "#007bff",
