@@ -12,6 +12,7 @@ const userRouter = require("./routes/user");
 const paymentRoutes = require("./routes/paymentRoutes");
 const itemRouter = require("./routes/items");
 const reviewRoutes = require("./routes/reviewRoutes"); // Import review routes
+const trackingg = require("./routes/tracking"); // Import review routes
 
 // Start the server
 app.listen(PORT, () => console.log(`Server Running on PORT:${PORT}`));
@@ -35,6 +36,8 @@ app.use("/api/add-new/", itemRouter);
 app.use("/api", userRouter);
 app.use("/api/v1/pay", paymentRoutes);
 app.use("/api/review", reviewRoutes); 
+app.use("/api/tracking", trackingg); 
+
 app.get('/api/reviews/count', async (req, res) => {
   try {
     // Get the count of reviews in the database

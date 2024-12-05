@@ -60,14 +60,44 @@ const AllrectOrder = () => {
         ) : (
           orders.map((order) => (
             <div
-              key={order.id}
+              key={order._id}
               className="border rounded-lg p-4 shadow hover:shadow-lg transition"
             >
               <h2 className="text-xl font-semibold mb-2">{order.name}</h2>
               <p className="text-gray-700">Order ID: {order._id}</p>
-              <p className="text-gray-700">Total: {order.price}Rs</p>
+              <p className="text-gray-700">Total: {order.price} Rs</p>
               <p className="text-gray-700">Quantity: {order.quantity}</p>
               <p className="text-gray-700">Payment Method: {order.payment_method}</p>
+              <div className="col-auto mt-4">
+                <a
+                  href={`http://localhost:3000/tracking/${order._id}`}
+                  className="bg-blue-500 text-white px-4 py-2 rounded block text-center"
+                  style={{
+                    fontSize: "18px",
+                    padding: "15px 30px",
+                    width: "200px",
+                    height: "60px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    textAlign: "center",
+                    lineHeight: "30px",
+                    display: "block",
+                    borderRadius: "8px",
+                    textDecoration: "none",
+                    transition: "background-color 0.3s ease, transform 0.2s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = "#0056b3";
+                    e.target.style.transform = "scale(1.05)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = "#007bff";
+                    e.target.style.transform = "scale(1)";
+                  }}
+                >
+                  Track Order
+                </a>
+              </div>
             </div>
           ))
         )}
