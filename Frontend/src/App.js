@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CartProvider } from './components/Cart/CartContext';
@@ -21,7 +22,7 @@ import { useCookies } from 'react-cookie';
 import Reviews from './components/Items/Reviews.jsx';
 import AllrectOrder from './components/Items/AllrectOrder.jsx';
 import AllPayments from './components/Items/AllPayments.jsx';
-
+import Tracking from "../src/components/Items/TrackingPage.jsx";
 function App() {
   const [cookies] = useCookies(['token']);
   const [user, setUser] = useState(null);
@@ -126,6 +127,9 @@ function App() {
   <Route path="/profile" element={<UserProfile />} />
   <Route path="/cart" element={<ShoppingCart />} />
   <Route path="/about-us" element={<><AboutUs /><Footer /></>} />
+  <Route path="/tracking/:id" element={<><Tracking/><Footer /></>} />
+
+
 
   {/* Admin Protected Routes */}
   <Route 

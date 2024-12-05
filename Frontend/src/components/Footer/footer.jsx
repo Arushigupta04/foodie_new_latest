@@ -8,14 +8,14 @@ import twitterIcon from '../../assets/twitter.svg';
 function Footer() {
   const { user } = useUser(); // Access user information from the context
   const [email, setEmail] = useState('');
-  const [reviewEmail, setReviewEmail] = useState(''); // State for email in review form
+  const [reviewEmail, setReviewEmail] = useState('');
   const [review, setReview] = useState('');
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [thankYouMessage, setThankYouMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [signInErrorMessage, setSignInErrorMessage] = useState(''); // State for sign-in error message
-  const [adminErrorMessage, setAdminErrorMessage] = useState(''); // State for admin review error message
+  const [loginPrompt, setLoginPrompt] = useState(''); // State for login prompt message
+  const [adminErrorMessage, setAdminErrorMessage] = useState('');
 
   // Newsletter form submission
   const handleNewsletterSubmit = (e) => {
@@ -38,24 +38,25 @@ function Footer() {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the entered email is 'johnadmin@gmail.com'
-    if (reviewEmail === 'arushigupta7492@gmail.com' || reviewEmail === 'admine.com') {
-      setAdminErrorMessage('Admins cannot submit reviews.');
-      setSignInErrorMessage('');
-      setThankYouMessage('');
-      setErrorMessage('');
-      return;
-    }
-    console.log(user)
-    // Check if the user is authenticated
+    // Check if the user is logged in
     if (!user) {
-      setErrorMessage('');
+      setLoginPrompt('Please log in to submit a review.');
       setThankYouMessage('');
-      setSignInErrorMessage('Please sign in to submit a review.');
+      setAdminErrorMessage('');
+      setErrorMessage('');
       return;
     }
 
-    // Validate review email and review content
+    // Check if the logged-in user is an admin
+    if (user.role === 'Admin') {
+      setAdminErrorMessage('Admins cannot submit reviews.');
+      setLoginPrompt('');
+      setThankYouMessage('');
+      setErrorMessage('');
+      return;
+    }
+
+    // Validate review email and content
     if (!reviewEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(reviewEmail)) {
       setErrorMessage('Please enter a valid email address.');
       return;
@@ -68,16 +69,17 @@ function Footer() {
 
     const reviewData = {
       email: reviewEmail,
-      rating: rating,
+      rating,
       reviewText: review,
     };
+    const token = localStorage.getItem('token');
 
     try {
       const response = await fetch('http://localhost:5000/api/review/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`, // Include token for authentication
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reviewData),
       });
@@ -89,7 +91,7 @@ function Footer() {
         setReview('');
         setRating(0);
         setThankYouMessage('Thanks for your feedback!');
-        setSignInErrorMessage('');
+        setLoginPrompt('');
         setAdminErrorMessage('');
         setErrorMessage('');
         setTimeout(() => setThankYouMessage(''), 3000);
@@ -120,7 +122,7 @@ function Footer() {
             <p><a href="http://localhost:3000/cart">Cart</a></p>
           </div>
 
-          <div className="footer-list follow-box">
+          <div className="footer-list">
             <h4>Follow Us</h4>
             <div className="social-media">
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
@@ -193,8 +195,8 @@ function Footer() {
 
             {thankYouMessage && <p className="thank-you-message">{thankYouMessage}</p>}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            {signInErrorMessage && <p className="sign-in-error-message">{signInErrorMessage}</p>} {/* Display the error message */}
-            {adminErrorMessage && <p className="admin-error-message">{adminErrorMessage}</p>} {/* Display admin review error */}
+            {loginPrompt && <p className="login-prompt-message">{loginPrompt}</p>}
+            {adminErrorMessage && <p className="admin-error-message">{adminErrorMessage}</p>}
           </div>
         </div>
       </div>

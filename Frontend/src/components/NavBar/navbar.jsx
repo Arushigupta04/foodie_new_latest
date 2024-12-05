@@ -1,3 +1,4 @@
+
 import React, { useState,useContext } from 'react';
 import './Navbar.css'; // Import CSS file
 import icon from '../../assets/icon.svg';
@@ -25,6 +26,7 @@ function Navbar() {
 
   const handleSignOut = () => {
     removeCookie('token', { path: '/' });
+    localStorage.removeItem('token');
     updateUser(null);
     
     clearCart();

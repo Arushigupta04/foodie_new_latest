@@ -233,7 +233,7 @@ const SignUp = () => {
               className="eye-icon1"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+      
             </span>
             <p className={`password-strength ${passwordStrength.toLowerCase()}`}>
               {passwordStrength && `Password Strength: ${passwordStrength}`}
@@ -255,7 +255,7 @@ const SignUp = () => {
               className="eye-icon"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+           
             </span>
             {validationErrors.repeatedPassword && <p className="error-text">{validationErrors.repeatedPassword}</p>}
           </div>

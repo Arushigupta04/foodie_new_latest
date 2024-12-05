@@ -2,10 +2,10 @@ const express = require("express");
 const jwt = require("jsonwebtoken"); // Ensure you have this library installed
 const router = express.Router();
 const Review = require("../models/reviewModel");
-
 // Middleware to check if the user is logged in and extract their role
 const authenticateUser = (req, res, next) => {
   const authHeader = req.header("Authorization");
+  console.log("authHeader", authHeader);
   if (!authHeader) {
     return res.status(401).json({ message: "Access denied. No token provided." });
   }
@@ -19,7 +19,7 @@ const authenticateUser = (req, res, next) => {
 
   try {
     // Decode token and verify with the secret
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.secret);
     req.user = decoded; // Attach user info to req.user
     console.log("Authenticated user:", decoded); // Debugging log
     next();

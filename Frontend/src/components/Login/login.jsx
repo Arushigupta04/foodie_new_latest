@@ -150,6 +150,8 @@ const Login = () => {
       });
 
       const data = await response.json();
+      console.log(data);
+      localStorage.setItem("token", data.token);  
 
       if (response.ok) {
         setCookie("token", data.token, { path: "/" });
